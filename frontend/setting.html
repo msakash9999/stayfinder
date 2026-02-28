@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="setting.css">
+</head>
+<body>
+    <main class="shell">
+        <section class="dashboard settings-dashboard">
+            <aside class="sidebar">
+                <div class="brand">
+                    <span class="brand-mark">S</span>
+                    <span class="brand-text">StayFinder</span>
+                </div>
+
+                <nav class="menu">
+                    <a href="hmbutton.html" class="menu-item"><span>Home</span></a>
+                    <a href="message.html" class="menu-item"><span>Messages</span></a>
+                    <a href="index.html" class="menu-item"><span>Discover</span></a>
+                    <a href="setting.html" class="menu-item active"><span>Settings</span></a>
+                </nav>
+
+                <div class="cta-card">
+                    <h3>Your Controls</h3>
+                    <p>Manage account, theme, alerts and app behavior.</p>
+                    <button onclick="window.location.href='index.html'">Back to Discover</button>
+                </div>
+            </aside>
+
+            <section class="settings-main">
+                <div class="content-top">
+                    <div class="breadcrumbs">Settings <span>/</span> Preferences</div>
+                    <div class="user" id="login-status">Guest User</div>
+                </div>
+
+                <div class="settings-grid">
+                    <article class="setting-card">
+                        <h3>Account Login</h3>
+                        <p>Login to save favorites, synced chats, and faster booking history.</p>
+                        <div class="settings-row">
+                            <button class="settings-btn primary" id="login-btn" type="button">Login</button>
+                            <button class="settings-btn ghost" id="logout-btn" type="button">Logout</button>
+                        </div>
+                        <div class="status-line" id="account-line">Status: Not logged in</div>
+                    </article>
+
+                    <article class="setting-card">
+                        <h3>Dark Mode</h3>
+                        <p>Switch between light and dark theme for comfortable viewing.</p>
+                        <label class="toggle-wrap">
+                            <input type="checkbox" id="dark-toggle">
+                            <span id="theme-label">Light Mode</span>
+                        </label>
+                    </article>
+
+                    <article class="setting-card">
+                        <h3>Notifications</h3>
+                        <p>Get instant alerts for new room replies and visit confirmations.</p>
+                        <label class="toggle-wrap">
+                            <input type="checkbox" id="notif-toggle" checked>
+                            <span id="notif-label">Notifications On</span>
+                        </label>
+                    </article>
+
+                    <article class="setting-card">
+                        <h3>Language</h3>
+                        <p>Choose your preferred app language.</p>
+                        <select class="settings-select" id="lang-select">
+                            <option value="english">English</option>
+                            <option value="hindi">Hindi</option>
+                        </select>
+                        <div class="status-line" id="lang-line">Current language: English</div>
+                    </article>
+
+                    <article class="setting-card">
+                        <h3>Privacy</h3>
+                        <p>Control your visibility and contact permissions.</p>
+                        <div class="settings-row">
+                            <button class="settings-btn ghost" type="button">Hide Phone Number</button>
+                            <button class="settings-btn ghost" type="button">Share Profile</button>
+                        </div>
+                    </article>
+
+                    <article class="setting-card">
+                        <h3>Support & Security</h3>
+                        <p>Need help or want extra security options for your account.</p>
+                        <div class="settings-row">
+                            <button class="settings-btn ghost" type="button">Contact Support</button>
+                            <button class="settings-btn ghost" type="button">Change Password</button>
+                        </div>
+                    </article>
+
+                    <article class="setting-card full-width">
+                        <h3>App Data</h3>
+                        <p>Manage saved app preferences in this browser.</p>
+                        <button class="settings-btn primary" id="save-btn" type="button">Save Settings</button>
+                        <button class="settings-btn ghost" id="reset-btn" type="button">Reset to Default</button>
+                        <div class="status-line" id="save-line">Changes are automatically remembered.</div>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        const loginBtn = document.getElementById("login-btn");
+        const logoutBtn = document.getElementById("logout-btn");
+        const accountLine = document.getElementById("account-line");
+        const loginStatus = document.getElementById("login-status");
+        const darkToggle = document.getElementById("dark-toggle");
+        const themeLabel = document.getElementById("theme-label");
+        const notifToggle = document.getElementById("notif-toggle");
+        const notifLabel = document.getElementById("notif-label");
+        const langSelect = document.getElementById("lang-select");
+        const langLine = document.getElementById("lang-line");
+        const saveBtn = document.getElementById("save-btn");
+        const resetBtn = document.getElementById("reset-btn");
+        const saveLine = document.getElementById("save-line");
+
+        function setLoginState(isLoggedIn) {
+            localStorage.setItem("sf_logged_in", isLoggedIn ? "1" : "0");
+            accountLine.textContent = isLoggedIn ? "Status: Logged in" : "Status: Not logged in";
+            loginStatus.textContent = isLoggedIn ? "Akash Mouar" : "Guest User";
+        }
+
+        function setTheme(isDark) {
+            localStorage.setItem("sf_dark_mode", isDark ? "1" : "0");
+            document.body.setAttribute("data-theme", isDark ? "dark" : "light");
+            darkToggle.checked = isDark;
+            themeLabel.textContent = isDark ? "Dark Mode" : "Light Mode";
+        }
+
+        function setNotifications(isOn) {
+            localStorage.setItem("sf_notifications", isOn ? "1" : "0");
+            notifToggle.checked = isOn;
+            notifLabel.textContent = isOn ? "Notifications On" : "Notifications Off";
+        }
+
+        function setLanguage(value) {
+            localStorage.setItem("sf_lang", value);
+            langSelect.value = value;
+            langLine.textContent = "Current language: " + (value === "hindi" ? "Hindi" : "English");
+        }
+
+        function loadSettings() {
+            setLoginState(localStorage.getItem("sf_logged_in") === "1");
+            setTheme(localStorage.getItem("sf_dark_mode") === "1");
+            setNotifications(localStorage.getItem("sf_notifications") !== "0");
+            setLanguage(localStorage.getItem("sf_lang") || "english");
+        }
+
+        loginBtn.addEventListener("click", function () {
+            setLoginState(true);
+        });
+
+        logoutBtn.addEventListener("click", function () {
+            setLoginState(false);
+        });
+
+        darkToggle.addEventListener("change", function () {
+            setTheme(darkToggle.checked);
+        });
+
+        notifToggle.addEventListener("change", function () {
+            setNotifications(notifToggle.checked);
+        });
+
+        langSelect.addEventListener("change", function () {
+            setLanguage(langSelect.value);
+        });
+
+        saveBtn.addEventListener("click", function () {
+            saveLine.textContent = "Settings saved.";
+        });
+
+        resetBtn.addEventListener("click", function () {
+            localStorage.removeItem("sf_logged_in");
+            localStorage.removeItem("sf_dark_mode");
+            localStorage.removeItem("sf_notifications");
+            localStorage.removeItem("sf_lang");
+            loadSettings();
+            saveLine.textContent = "Settings reset to default.";
+        });
+
+        loadSettings();
+    </script>
+</body>
+</html>

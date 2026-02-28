@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Favorites</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="favorites.css">
+</head>
+<body data-protected="true" data-redirect="favorites.html">
+    <main class="shell">
+        <section class="dashboard favorites-dashboard">
+            <aside class="sidebar">
+                <div class="brand">
+                    <span class="brand-mark">S</span>
+                    <span class="brand-text">StayFinder</span>
+                </div>
+
+                <nav class="menu">
+                    <a href="hmbutton.html" class="menu-item">
+                        <span>Home</span>
+                    </a>
+                    <a href="message.html" class="menu-item">
+                        <span>Messages</span>
+                    </a>
+                    <a href="index.html" class="menu-item">
+                        <span>Discover</span>
+                    </a>
+                    <a href="favorites.html" class="menu-item active">
+                        <span>Favorites</span>
+                    </a>
+                    <a href="setting.html" class="menu-item">
+                        <span>Settings</span>
+                    </a>
+                </nav>
+
+                <div class="cta-card">
+                    <h3>Saved homes at one place</h3>
+                    <p>Compare your shortlisted properties before contacting owners.</p>
+                    <button type="button" onclick="window.location.href='index.html'">Add more</button>
+                </div>
+            </aside>
+
+            <section class="content">
+                <div class="content-top">
+                    <div class="breadcrumbs">Favorites <span>/</span> Saved listings</div>
+                    <div class="user">Ashish Mishra</div>
+                </div>
+
+                <div class="favorites-head">
+                    <div>
+                        <h1 class="favorites-title">Your Favorite Place</h1>
+                        <p class="favorites-subtitle"><span id="saved-count">0</span> listings saved for review</p>
+                    </div>
+                    <div class="favorites-actions">
+                        <button class="fav-btn" id="clear-all-btn" type="button">Clear all</button>
+                        <button class="fav-btn primary" type="button" onclick="window.location.href='index.html'">Explore more</button>
+                    </div>
+                </div>
+
+                <div class="favorites-grid" id="favorites-grid"></div>
+
+                <div class="favorite-empty" id="favorite-empty">
+                    <h3>No favorites yet</h3>
+                    <p>Save properties from Discover page to see them here.</p>
+                    <button class="fav-btn primary" type="button" onclick="window.location.href='index.html'">Go to Discover</button>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="auth-client.js"></script>
+    <script src="guard.js"></script>
+    <script>
+        const API_BASE = "http://localhost:5000/api";
+        const favoritesGrid = document.getElementById("favorites-grid");
+        const savedCount = document.getElementById("saved-count");
+        const emptyState = document.getElementById("favorite-empty");
+        const clearAllButton = document.getElementById("clear-all-btn");
+        const userBadge = document.querySelector(".user");
+        let currentFavorites = [];
+
+        function formatPrice(price) {
+            return "Rs " + Number(price).toLocaleString("en-IN") + "/mo";
+        }
+
+        function renderFavorites() {
+            const total = currentFavorites.length;
+            savedCount.textContent = String(total);
+
+            if (total === 0) {
+                favoritesGrid.innerHTML = "";
+                emptyState.classList.add("show");
+            } else {
+                emptyState.classList.remove("show");
+                favoritesGrid.innerHTML = currentFavorites.map(function (property) {
+                    return `
+                        <article class="favorite-card">
+                            <img src="${property.image || "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80"}" alt="${property.title}">
+                            <div class="favorite-info">
+                                <h3>${property.title}</h3>
+                                <p>${property.furnishing} | ${property.areaSqft} sq.ft | ${property.location}</p>
+                                <div class="favorite-meta">
+                                    <strong>${formatPrice(property.price)}</strong>
+                                    <span>${property.updatedAt || "Recently updated"}</span>
+                                </div>
+                            </div>
+                            <div class="favorite-card-actions">
+                                <button class="fav-btn primary view-fav-btn" type="button" data-property-id="${property.id}">View</button>
+                                <button class="fav-btn remove-fav-btn" type="button" data-property-id="${property.id}">Remove</button>
+                            </div>
+                        </article>
+                    `;
+                }).join("");
+            }
+        }
+
+        async function loadFavorites() {
+            const response = await StayAuth.fetchWithAuth(API_BASE + "/favorites");
+            if (!response.ok) {
+                throw new Error("Failed to load favorites");
+            }
+            const payload = await response.json();
+            currentFavorites = payload.data || [];
+            renderFavorites();
+        }
+
+        async function refreshUserBadge() {
+            try {
+                const payload = await StayAuth.getMe(API_BASE);
+                userBadge.innerHTML = "<a href=\"profile.html\">" + payload.user.name + "</a>";
+            } catch (error) {
+                userBadge.innerHTML = "<a href=\"login.html\">Login</a>";
+            }
+        }
+
+        favoritesGrid.addEventListener("click", async function (event) {
+            const target = event.target;
+            if (!(target instanceof HTMLElement)) {
+                return;
+            }
+
+            if (target.classList.contains("view-fav-btn")) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            if (target.classList.contains("remove-fav-btn")) {
+                const propertyId = target.dataset.propertyId;
+                if (!propertyId) {
+                    return;
+                }
+                try {
+                    await StayAuth.fetchWithAuth(API_BASE + "/favorites/" + encodeURIComponent(propertyId), {
+                        method: "DELETE"
+                    });
+                    await loadFavorites();
+                } catch (error) {
+                    alert("Could not remove favorite.");
+                }
+            }
+        });
+
+        clearAllButton.addEventListener("click", async function () {
+            try {
+                const response = await StayAuth.fetchWithAuth(API_BASE + "/favorites");
+                const payload = await response.json();
+                const items = payload.data || [];
+                await Promise.all(items.map(function (item) {
+                    return StayAuth.fetchWithAuth(API_BASE + "/favorites/" + encodeURIComponent(item.id), {
+                        method: "DELETE"
+                    });
+                }));
+                await loadFavorites();
+            } catch (error) {
+                alert("Could not clear favorites.");
+            }
+        });
+
+        loadFavorites().catch(function () {
+            favoritesGrid.innerHTML = "<p class=\"favorites-subtitle\">Please login to view favorites.</p>";
+            emptyState.classList.remove("show");
+        });
+        refreshUserBadge();
+    </script>
+</body>
+</html>

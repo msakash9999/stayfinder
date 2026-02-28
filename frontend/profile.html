@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body data-protected="true" data-redirect="profile.html">
+    <main class="auth-card">
+        <h1>Your Profile</h1>
+        <p class="auth-subtitle">Logged in account details.</p>
+        <div class="auth-form">
+            <label>Name</label>
+            <input id="profile-name" type="text" readonly>
+            <label>Email</label>
+            <input id="profile-email" type="text" readonly>
+            <button class="auth-btn" id="logout-btn" type="button">Logout</button>
+            <p class="auth-msg" id="auth-msg"></p>
+        </div>
+        <div class="auth-links">
+            <a href="index.html">Discover</a>
+            <a href="favorites.html">Favorites</a>
+        </div>
+    </main>
+
+    <script src="auth-client.js"></script>
+    <script src="guard.js"></script>
+    <script>
+        const API_BASE = "http://localhost:5000/api";
+        const profileName = document.getElementById("profile-name");
+        const profileEmail = document.getElementById("profile-email");
+        const msg = document.getElementById("auth-msg");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        async function loadProfile() {
+            try {
+                const payload = await StayAuth.getMe(API_BASE);
+                profileName.value = payload.user.name || "";
+                profileEmail.value = payload.user.email || "";
+            } catch (error) {
+                msg.textContent = "Session expired. Please login again.";
+                setTimeout(function () {
+                    StayAuth.redirectToLogin("profile.html");
+                }, 500);
+            }
+        }
+
+        logoutBtn.addEventListener("click", function () {
+            StayAuth.logout("login.html");
+        });
+
+        loadProfile();
+    </script>
+</body>
+</html>

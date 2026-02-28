@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <main class="auth-card">
+        <h1>Create Account</h1>
+        <p class="auth-subtitle">Register once and manage favorites securely.</p>
+        <form class="auth-form" id="register-form">
+            <label for="name">Name</label>
+            <input id="name" type="text" required placeholder="Your name">
+            <label for="email">Email</label>
+            <input id="email" type="email" required placeholder="you@example.com">
+            <label for="password">Password</label>
+            <input id="password" type="password" required minlength="6" placeholder="At least 6 characters">
+            <button class="auth-btn" type="submit">Register</button>
+            <p class="auth-msg" id="auth-msg"></p>
+        </form>
+        <div class="auth-links">
+            <a href="login.html">Already have account</a>
+            <a href="index.html">Back to Discover</a>
+        </div>
+    </main>
+
+    <script src="auth-client.js"></script>
+    <script>
+        const API_BASE = "http://localhost:5000/api";
+        const form = document.getElementById("register-form");
+        const msg = document.getElementById("auth-msg");
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            msg.textContent = "";
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            try {
+                await StayAuth.register(API_BASE, {
+                    name: name,
+                    email: email,
+                    password: password
+                });
+                msg.classList.add("success");
+                msg.textContent = "Account created. Redirecting...";
+                window.location.href = "profile.html";
+            } catch (error) {
+                msg.classList.remove("success");
+                msg.textContent = error.message || "Registration failed";
+            }
+        });
+    </script>
+</body>
+</html>

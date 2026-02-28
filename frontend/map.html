@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Map View</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="map-page-body">
+    <main class="map-page">
+        <section class="map-panel map-only-panel">
+            <div id="map" aria-label="Property map"></div>
+
+            <div class="map-top">
+                <form class="map-search" id="map-search-form">
+                    <button type="button" class="map-back-btn" id="map-back-btn" aria-label="Go back">Back</button>
+                    <label for="map-search-input" class="sr-only">Search location</label>
+                    <div class="map-search-shell">
+                        <input id="map-search-input" type="text" placeholder="Search in Patna only" value="Boring Road, Patna">
+                        <button type="submit" class="map-search-submit" aria-label="Search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 30 30" fill="currentColor" aria-hidden="true">
+                                <path d="M13 3C7.489 3 3 7.489 3 13s4.489 10 10 10a9.95 9.95 0 0 0 6.322-2.264l5.971 5.971a1 1 0 1 0 1.414-1.414l-5.97-5.97A9.95 9.95 0 0 0 23 13c0-5.511-4.489-10-10-10m0 2c4.43 0 8 3.57 8 8s-3.57 8-8 8-8-3.57-8-8 3.57-8 8-8"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="button" class="map-search-close" id="map-search-close" aria-label="Clear search">x</button>
+                </form>
+            </div>
+
+            <div class="property-float">
+                <img id="property-image" src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=280&q=80" alt="Property card preview">
+                <div>
+                    <strong id="property-price">Rs 12,000/mo</strong>
+                    <p id="property-address">21 Boring Road, Patna, Bihar</p>
+                    <p id="property-meta">Single Room • Near coaching</p>
+                    <button type="button" id="property-focus-btn">Focus on map</button>
+                </div>
+            </div>
+
+            <div class="map-places" id="map-places-list" aria-label="Popular places in Patna"></div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const CITY = {
+            name: "Patna",
+            state: "Bihar",
+            country: "India",
+            center: [25.5941, 85.1376],
+            bounds: {
+                south: 25.50,
+                west: 85.00,
+                north: 25.66,
+                east: 85.25
+            }
+        };
+
+        const cityBounds = L.latLngBounds(
+            [CITY.bounds.south, CITY.bounds.west],
+            [CITY.bounds.north, CITY.bounds.east]
+        );
+
+        const map = L.map("map", {
+            maxBounds: cityBounds,
+            maxBoundsViscosity: 1
+        }).setView(CITY.center, 14);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+
+        const PLACES = [
+            {
+                name: "Boring Road Student Home",
+                area: "Boring Road",
+                coords: [25.5994, 85.1296],
+                price: "Rs 12,000/mo",
+                address: "21 Boring Road, Patna",
+                details: "Single Room • Shared Kitchen • Near coaching",
+                image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=280&q=80"
+            },
+            {
+                name: "Kankarbagh Study Stay",
+                area: "Kankarbagh",
+                coords: [25.5947, 85.1653],
+                price: "Rs 8,500/mo",
+                address: "Road No. 2, Kankarbagh, Patna",
+                details: "Shared Room • Wi-Fi • Market nearby",
+                image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=280&q=80"
+            },
+            {
+                name: "Rajendra Nagar Room",
+                area: "Rajendra Nagar",
+                coords: [25.6062, 85.1452],
+                price: "Rs 9,200/mo",
+                address: "Sector 3, Rajendra Nagar, Patna",
+                details: "Single Room • Balcony • Bus access",
+                image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=280&q=80"
+            },
+            {
+                name: "Patliputra Budget House",
+                area: "Patliputra",
+                coords: [25.6218, 85.1169],
+                price: "Rs 10,500/mo",
+                address: "Patliputra Colony, Patna",
+                details: "1 Room Set • Furnished • Quiet area",
+                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=280&q=80"
+            },
+            {
+                name: "Bailey Road Student PG",
+                area: "Bailey Road",
+                coords: [25.6068, 85.0899],
+                price: "Rs 7,800/mo",
+                address: "Near Bailey Road, Patna",
+                details: "Shared PG • Food option • Main road",
+                image: "https://images.unsplash.com/photo-1460317442991-0ecadf769676?auto=format&fit=crop&w=280&q=80"
+            }
+        ];
+
+        const propertyImage = document.getElementById("property-image");
+        const propertyPrice = document.getElementById("property-price");
+        const propertyAddress = document.getElementById("property-address");
+        const propertyMeta = document.getElementById("property-meta");
+        const propertyFocusButton = document.getElementById("property-focus-btn");
+        const placesList = document.getElementById("map-places-list");
+
+        let selectedPlace = PLACES[0];
+        let searchMarker = L.marker(selectedPlace.coords).addTo(map).bindPopup("Search result").openPopup();
+        const placeMarkers = [];
+
+        function placePopupContent(place) {
+            return "<strong>" + place.name + "</strong><br>" + place.price + "<br>" + place.area;
+        }
+
+        function updatePropertyCard(place) {
+            selectedPlace = place;
+            propertyImage.src = place.image;
+            propertyImage.alt = place.name;
+            propertyPrice.textContent = place.price;
+            propertyAddress.textContent = place.address;
+            propertyMeta.textContent = place.details;
+        }
+
+        function focusOnPlace(place, zoomLevel) {
+            map.setView(place.coords, zoomLevel || 14);
+            updatePropertyCard(place);
+        }
+
+        PLACES.forEach(function (place, index) {
+            const marker = L.marker(place.coords)
+                .addTo(map)
+                .bindPopup(placePopupContent(place));
+            marker.on("click", function () {
+                updatePropertyCard(place);
+            });
+            placeMarkers.push(marker);
+
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "map-place-chip";
+            button.textContent = place.area + " - " + place.price;
+            button.addEventListener("click", function () {
+                focusOnPlace(place, 15);
+                marker.openPopup();
+            });
+            placesList.appendChild(button);
+
+            if (index === 0) {
+                marker.openPopup();
+            }
+        });
+
+        focusOnPlace(selectedPlace, 13);
+
+        const searchForm = document.getElementById("map-search-form");
+        const searchInput = document.getElementById("map-search-input");
+        const searchSubmitButton = document.querySelector(".map-search-submit");
+        const searchCloseButton = document.getElementById("map-search-close");
+        const mapBackButton = document.getElementById("map-back-btn");
+
+        function isInsideCity(lat, lon) {
+            return lat >= CITY.bounds.south &&
+                lat <= CITY.bounds.north &&
+                lon >= CITY.bounds.west &&
+                lon <= CITY.bounds.east;
+        }
+
+        async function searchLocation(query) {
+            const cityScopedQuery = query + ", " + CITY.name + ", " + CITY.state + ", " + CITY.country;
+            const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&bounded=1&viewbox=" +
+                CITY.bounds.west + "," + CITY.bounds.north + "," + CITY.bounds.east + "," + CITY.bounds.south +
+                "&q=" + encodeURIComponent(cityScopedQuery);
+            const response = await fetch(url, {
+                headers: { Accept: "application/json" }
+            });
+
+            if (!response.ok) {
+                throw new Error("Search failed");
+            }
+
+            const results = await response.json();
+            if (!results.length) {
+                throw new Error("No results");
+            }
+
+            const result = results[0];
+            const lat = Number(result.lat);
+            const lon = Number(result.lon);
+            const name = result.display_name;
+
+            if (!isInsideCity(lat, lon)) {
+                throw new Error("Out of city bounds");
+            }
+
+            map.setView([lat, lon], 14);
+            searchMarker.setLatLng([lat, lon]).bindPopup(name).openPopup();
+        }
+
+        searchForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const query = searchInput.value.trim();
+            if (!query) {
+                return;
+            }
+
+            searchSubmitButton.disabled = true;
+
+            try {
+                await searchLocation(query);
+            } catch (error) {
+                alert("Only Patna locations are allowed. Try another place in Patna.");
+            } finally {
+                searchSubmitButton.disabled = false;
+            }
+        });
+
+        searchCloseButton.addEventListener("click", function () {
+            searchInput.value = "";
+            searchInput.focus();
+        });
+
+        mapBackButton.addEventListener("click", function () {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        propertyFocusButton.addEventListener("click", function () {
+            focusOnPlace(selectedPlace, 15);
+            const selectedMarker = placeMarkers.find(function (marker) {
+                const markerLatLng = marker.getLatLng();
+                return markerLatLng.lat === selectedPlace.coords[0] && markerLatLng.lng === selectedPlace.coords[1];
+            });
+            if (selectedMarker) {
+                selectedMarker.openPopup();
+            }
+        });
+    </script>
+</body>
+</html>

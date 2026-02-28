@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Messages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .messages-dashboard {
+            grid-template-columns: 210px 1fr;
+        }
+
+        .message-main {
+            padding: 24px;
+            background: #f8fbff;
+        }
+
+        .message-shell {
+            border: 1px solid #dbe4ee;
+            border-radius: 18px;
+            background: #fff;
+            display: grid;
+            grid-template-columns: 280px 1fr 260px;
+            min-height: 640px;
+            overflow: hidden;
+        }
+
+        .conversation-list,
+        .chat-center,
+        .chat-side {
+            padding: 16px;
+        }
+
+        .conversation-list {
+            border-right: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .chat-side {
+            border-left: 1px solid #e2e8f0;
+            background: #fcfdff;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0 14px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tabs button {
+            border: 1px solid #dbe4ee;
+            border-radius: 999px;
+            background: #fff;
+            color: #334155;
+            font-weight: 700;
+            font-family: inherit;
+            font-size: 0.8rem;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        .filter-tabs .active {
+            background: #e0ecff;
+            color: #1e40af;
+            border-color: #bfdbfe;
+        }
+
+        .conv-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+
+        .conv-item.active {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+        }
+
+        .conv-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .conv-meta {
+            font-size: 0.78rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 8px;
+        }
+
+        .property-card {
+            border: 1px solid #dbe4ee;
+            border-radius: 12px;
+            padding: 12px;
+            background: #f8fbff;
+            margin-bottom: 12px;
+        }
+
+        .status-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 8px 0 10px;
+        }
+
+        .status-pill {
+            border-radius: 999px;
+            background: #f1f5f9;
+            border: 1px solid #dbe4ee;
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 5px 10px;
+        }
+
+        .pinned-card {
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 10px;
+            background: #fff;
+            margin-bottom: 10px;
+            color: #475569;
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .chat-log {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            background: #fff;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bubble {
+            max-width: 78%;
+            border-radius: 12px;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+        .bubble.agent {
+            background: #f1f5f9;
+            color: #1e293b;
+            align-self: flex-start;
+        }
+
+        .bubble.me {
+            background: #1d4ed8;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .templates {
+            margin: 12px 0;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .template-btn {
+            border: 1px solid #dbe4ee;
+            background: #fff;
+            border-radius: 999px;
+            font-family: inherit;
+            font-weight: 700;
+            color: #334155;
+            font-size: 0.78rem;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        .composer {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .composer input {
+            border: 1px solid #cfd8e3;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: inherit;
+            min-width: 0;
+        }
+
+        .composer button {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .attach-btn {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .send-btn {
+            background: #1d4ed8;
+            color: #fff;
+        }
+
+        .side-block {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+
+        .side-block h3 {
+            margin: 0 0 10px;
+            font-size: 0.98rem;
+        }
+
+        .visit-form {
+            display: grid;
+            gap: 8px;
+        }
+
+        .visit-form input {
+            border: 1px solid #cfd8e3;
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-family: inherit;
+        }
+
+        .visit-form button,
+        .action-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .visit-form button {
+            background: #1d4ed8;
+            color: #fff;
+        }
+
+        .action-btn {
+            width: 100%;
+            margin-bottom: 8px;
+            border: 1px solid #dbe4ee;
+            background: #fff;
+            color: #334155;
+        }
+
+        .tip-list {
+            margin: 0;
+            padding-left: 16px;
+            color: #475569;
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1120px) {
+            .message-shell {
+                grid-template-columns: 260px 1fr;
+            }
+
+            .chat-side {
+                grid-column: 1 / -1;
+                border-left: 0;
+                border-top: 1px solid #e2e8f0;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .messages-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .message-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .conversation-list {
+                border-right: 0;
+                border-bottom: 1px solid #e2e8f0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <section class="dashboard messages-dashboard">
+            <aside class="sidebar">
+                <div class="brand">
+                    <span class="brand-mark">S</span>
+                    <span class="brand-text">StayFinder</span>
+                </div>
+
+                <nav class="menu">
+                    <a href="hmbutton.html" class="menu-item"><span>Home</span></a>
+                    <a href="message.html" class="menu-item active"><span>Messages</span></a>
+                    <a href="index.html" class="menu-item"><span>Discover</span></a>
+                    <a href="map.html" class="menu-item"><span>Map View</span></a>
+                </nav>
+
+                <div class="cta-card">
+                    <h3>Need Quick Reply?</h3>
+                    <p>Use templates to ask rent, visit time, and room availability.</p>
+                    <button onclick="document.getElementById('message-input').focus()">Start Chat</button>
+                </div>
+            </aside>
+
+            <section class="message-main">
+                <div class="content-top">
+                    <div class="breadcrumbs">Messages <span>/</span> Student Support</div>
+                    <div class="user">Akash Mouar</div>
+                </div>
+
+                <div class="message-shell">
+                    <aside class="conversation-list">
+                        <h2>Conversations</h2>
+                        <div class="filter-tabs">
+                            <button class="active" type="button">All</button>
+                            <button type="button">Unread</button>
+                            <button type="button">Important</button>
+                            <button type="button">Booked</button>
+                        </div>
+
+                        <article class="conv-item active">
+                            <div class="conv-top"><strong>Ravi (Owner)</strong><span>2m</span></div>
+                            <div class="conv-meta"><span>Room available from 1st March</span><span class="badge">2</span></div>
+                        </article>
+                        <article class="conv-item">
+                            <div class="conv-top"><strong>Priya Hostel</strong><span>12m</span></div>
+                            <div class="conv-meta"><span>Girls room, Wi-Fi included</span><span class="badge">1</span></div>
+                        </article>
+                        <article class="conv-item">
+                            <div class="conv-top"><strong>Aman PG</strong><span>1h</span></div>
+                            <div class="conv-meta"><span>Visit slot shared</span><span>Read</span></div>
+                        </article>
+                        <article class="conv-item">
+                            <div class="conv-top"><strong>Help Desk</strong><span>3h</span></div>
+                            <div class="conv-meta"><span>Booking guidance message</span><span>Read</span></div>
+                        </article>
+                    </aside>
+
+                    <section class="chat-center">
+                        <div class="property-card">
+                            <strong>21 Boring Road, Patna</strong>
+                            <p>Rs 12,000/mo • 700m from coaching area • Shared kitchen</p>
+                        </div>
+
+                        <div class="status-row">
+                            <span class="status-pill">Online</span>
+                            <span class="status-pill">Last seen: 1 min ago</span>
+                            <span class="status-pill">Verified owner</span>
+                        </div>
+
+                        <div class="pinned-card">
+                            <strong>Pinned:</strong> Rent Rs 12,000, deposit Rs 6,000, electricity separate, gate closes at 10:30 PM.
+                        </div>
+
+                        <div class="chat-log" id="chat-log">
+                            <div class="bubble agent">Hi, room is available near Boring Road. Do you want to visit today?</div>
+                            <div class="bubble me">Yes, please share available time and final rent details.</div>
+                            <div class="bubble agent">Visit slots: 4:30 PM or 6:00 PM. Final rent is Rs 12,000 per month.</div>
+                        </div>
+
+                        <div class="templates">
+                            <button class="template-btn" type="button" data-template="Is this room still available?">Is room available?</button>
+                            <button class="template-btn" type="button" data-template="Can I visit the room today?">Can I visit today?</button>
+                            <button class="template-btn" type="button" data-template="What is the final monthly rent and deposit?">What is final rent?</button>
+                        </div>
+
+                        <div class="composer">
+                            <button class="attach-btn" type="button">Attach</button>
+                            <input id="message-input" type="text" placeholder="Type your message...">
+                            <button class="send-btn" id="send-btn" type="button">Send</button>
+                        </div>
+                    </section>
+
+                    <aside class="chat-side">
+                        <section class="side-block">
+                            <h3>Schedule Visit</h3>
+                            <form class="visit-form">
+                                <input type="date" aria-label="Visit date">
+                                <input type="time" aria-label="Visit time">
+                                <button type="button">Confirm Visit</button>
+                            </form>
+                        </section>
+
+                        <section class="side-block">
+                            <h3>Quick Actions</h3>
+                            <button class="action-btn" type="button">Call Owner</button>
+                            <button class="action-btn" type="button">Open WhatsApp</button>
+                        </section>
+
+                        <section class="side-block">
+                            <h3>Safety Tips</h3>
+                            <ul class="tip-list">
+                                <li>Visit room before any token payment.</li>
+                                <li>Ask for owner ID verification.</li>
+                                <li>Confirm rent and deposit in writing.</li>
+                            </ul>
+                        </section>
+                    </aside>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        const input = document.getElementById("message-input");
+        const sendBtn = document.getElementById("send-btn");
+        const chatLog = document.getElementById("chat-log");
+        const templates = document.querySelectorAll(".template-btn");
+
+        templates.forEach(function (button) {
+            button.addEventListener("click", function () {
+                input.value = button.dataset.template;
+                input.focus();
+            });
+        });
+
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) {
+                return;
+            }
+
+            const bubble = document.createElement("div");
+            bubble.className = "bubble me";
+            bubble.textContent = text;
+            chatLog.appendChild(bubble);
+            input.value = "";
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+        input.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

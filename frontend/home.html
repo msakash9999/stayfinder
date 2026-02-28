@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="shell">
+        <section class="dashboard">
+            <aside class="sidebar">
+                <div class="brand">
+                    <span class="brand-mark">S</span>
+                    <span class="brand-text">StayFinder</span>
+                </div>
+
+                <nav class="menu">
+                    <a href="hmbutton.html" class="menu-item active"><span>Home</span></a>
+                    <a href="index.html" class="menu-item"><span>Discover</span></a>
+                    <a href="map.html" class="menu-item"><span>Map View</span></a>
+                </nav>
+
+                <div class="cta-card">
+                    <h3>Student Rentals</h3>
+                    <p>Find normal, affordable homes in Patna only.</p>
+                    <button onclick="window.location.href='map.html'">Open Map</button>
+                </div>
+            </aside>
+
+            <section class="content">
+                <div class="content-top">
+                    <div class="breadcrumbs">Home <span>/</span> Patna</div>
+                    <div class="user">StayFinder</div>
+                </div>
+
+                <div class="listing-head">
+                    <div>
+                        <h1>Welcome to StayFinder</h1>
+                        <p>Local student home search for Patna, Bihar</p>
+                    </div>
+                    <div class="price">
+                        <strong>100+</strong>
+                        <span>Active listings</span>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80" alt="House in Patna">
+                </div>
+
+                <div class="stats">
+                    <span>Boring Road</span>
+                    <span>Kankarbagh</span>
+                    <span>Rajendra Nagar</span>
+                </div>
+
+                <p class="description">
+                    Browse verified student-friendly homes in Patna. Use Discover for simple budget options and Map View for location-based search inside Patna city.
+                </p>
+
+                <div class="actions">
+                    <button class="ghost" onclick="window.location.href='index.html'">Go to Discover</button>
+                    <button class="primary" onclick="window.location.href='map.html'">Open Map</button>
+                </div>
+            </section>
+
+            <section class="map-panel">
+                <div class="property-float" style="top: 24px;">
+                    <div>
+                        <strong>City Locked</strong>
+                        <p>Search is restricted to Patna, Bihar.</p>
+                        <button onclick="window.location.href='map.html'">Try Search</button>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+</html>

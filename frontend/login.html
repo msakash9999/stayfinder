@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <main class="auth-card">
+        <h1>Login</h1>
+        <p class="auth-subtitle">Access your saved properties and profile.</p>
+        <form class="auth-form" id="login-form">
+            <label for="email">Email</label>
+            <input id="email" type="email" required placeholder="you@example.com">
+            <label for="password">Password</label>
+            <input id="password" type="password" required placeholder="Your password">
+            <button class="auth-btn" type="submit">Login</button>
+            <p class="auth-msg" id="auth-msg"></p>
+        </form>
+        <div class="auth-links">
+            <a href="register.html">Create account</a>
+            <a href="index.html">Back to Discover</a>
+        </div>
+    </main>
+
+    <script src="auth-client.js"></script>
+    <script>
+        const API_BASE = "http://localhost:5000/api";
+        const form = document.getElementById("login-form");
+        const msg = document.getElementById("auth-msg");
+        const params = new URLSearchParams(window.location.search);
+        const nextPath = params.get("next") || "index.html";
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            msg.textContent = "";
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            try {
+                await StayAuth.login(API_BASE, { email: email, password: password });
+                msg.classList.add("success");
+                msg.textContent = "Login successful. Redirecting...";
+                window.location.href = nextPath;
+            } catch (error) {
+                msg.classList.remove("success");
+                msg.textContent = error.message || "Login failed";
+            }
+        });
+    </script>
+</body>
+</html>

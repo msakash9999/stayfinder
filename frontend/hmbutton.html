@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayFinder | Student Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="hmbutton.css">
+</head>
+<body>
+    <main class="student-home-wrap">
+        <section class="panel">
+            <button class="btn btn-ghost" type="button" onclick="window.history.length > 1 ? window.history.back() : window.location.href='index.html'">Back</button>
+        </section>
+
+        <section class="home-hero">
+            <h1>Student Home Dashboard - Patna</h1>
+            <p>Find normal, affordable homes near coaching centers with verified details.</p>
+            <form class="search-grid">
+                <input type="text" placeholder="Area in Patna (Boring Road, Kankarbagh)">
+                <select>
+                    <option>Budget: Any</option>
+                    <option>Rs 5,000 - Rs 8,000</option>
+                    <option>Rs 8,000 - Rs 12,000</option>
+                    <option>Rs 12,000 - Rs 18,000</option>
+                </select>
+                <select>
+                    <option>Room Type</option>
+                    <option>Single Room</option>
+                    <option>Shared Room</option>
+                    <option>1 BHK</option>
+                </select>
+                <button class="btn btn-primary" type="button">Search</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Top Localities in Patna</h2>
+            <div class="locality-grid">
+                <article class="locality-card"><strong>Boring Road</strong><span>Coaching + food access</span></article>
+                <article class="locality-card"><strong>Kankarbagh</strong><span>Budget rooms available</span></article>
+                <article class="locality-card"><strong>Rajendra Nagar</strong><span>Good public transport</span></article>
+                <article class="locality-card"><strong>Patliputra</strong><span>Quiet study zone</span></article>
+                <article class="locality-card"><strong>Bailey Road</strong><span>Main city connectivity</span></article>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Quick Filters</h2>
+            <div class="filter-row">
+                <button class="chip" type="button">Near Coaching</button>
+                <button class="chip" type="button">Girls</button>
+                <button class="chip" type="button">Boys</button>
+                <button class="chip" type="button">Unisex</button>
+                <button class="chip" type="button">Furnished</button>
+                <button class="chip" type="button">Wi-Fi</button>
+                <button class="chip" type="button">Food Included</button>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Featured Budget Stays</h2>
+            <div class="stay-grid">
+                <article class="stay-card">
+                    <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=900&q=80" alt="Student room near Boring Road">
+                    <div class="stay-body">
+                        <strong>Rs 7,500/mo - Boring Road</strong>
+                        <p>650m from coaching lane</p>
+                        <button class="btn btn-ghost" type="button">View details</button>
+                    </div>
+                </article>
+                <article class="stay-card">
+                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80" alt="Shared student room in Kankarbagh">
+                    <div class="stay-body">
+                        <strong>Rs 6,200/mo - Kankarbagh</strong>
+                        <p>Shared kitchen and Wi-Fi</p>
+                        <button class="btn btn-ghost" type="button">View details</button>
+                    </div>
+                </article>
+                <article class="stay-card">
+                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80" alt="One room near Rajendra Nagar">
+                    <div class="stay-body">
+                        <strong>Rs 9,000/mo - Rajendra Nagar</strong>
+                        <p>Single room, transport nearby</p>
+                        <button class="btn btn-ghost" type="button">View details</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Why Choose StayFinder</h2>
+            <div class="why-strip">
+                <div class="why-item">Verified Listings</div>
+                <div class="why-item">No Broker Support</div>
+                <div class="why-item">Student Help Team</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Estimated Monthly Cost Helper</h2>
+            <div class="cost-grid">
+                <label>
+                    Rent (Rs)
+                    <input type="number" id="rent-cost" value="8000" min="0">
+                </label>
+                <label>
+                    Food (Rs)
+                    <input type="number" id="food-cost" value="3000" min="0">
+                </label>
+                <label>
+                    Travel (Rs)
+                    <input type="number" id="travel-cost" value="1200" min="0">
+                </label>
+                <button class="btn btn-primary" id="calc-cost-btn" type="button">Calculate</button>
+            </div>
+            <div class="cost-result" id="cost-result">Total monthly estimate: Rs 12,200</div>
+        </section>
+
+        <section class="panel">
+            <h2>Student Reviews</h2>
+            <div class="review-grid">
+                <article class="review-card">
+                    <p>"Room was clean and near my coaching. Shifted in one day."</p>
+                    <span>- Neha, NEET aspirant</span>
+                </article>
+                <article class="review-card">
+                    <p>"Found a budget place in Kankarbagh without broker issues."</p>
+                    <span>- Aman, SSC student</span>
+                </article>
+                <article class="review-card">
+                    <p>"Map search made it easy to shortlist homes in my area."</p>
+                    <span>- Priya, UPSC student</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Safety Information</h2>
+            <div class="safety-grid">
+                <div class="safety-badge">CCTV Available</div>
+                <div class="safety-badge">Warden Support</div>
+                <div class="safety-badge">Gated Entry</div>
+                <div class="safety-badge">Emergency Contact</div>
+            </div>
+        </section>
+
+        <section class="panel support-box">
+            <p>Need quick help? Talk to support for room availability, visits, and booking guidance.</p>
+            <div class="cta-row">
+                <button class="btn btn-ghost" type="button">Call Support: +91 7281347083</button>
+                <button class="btn btn-primary" type="button">WhatsApp Support</button>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Start Your Search</h2>
+            <div class="cta-row">
+                <button class="btn btn-primary" type="button" onclick="window.location.href='index.html'">Find Rooms</button>
+                <button class="btn btn-ghost" type="button" onclick="window.location.href='map.html'">Open Map</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const rentInput = document.getElementById("rent-cost");
+        const foodInput = document.getElementById("food-cost");
+        const travelInput = document.getElementById("travel-cost");
+        const calculateButton = document.getElementById("calc-cost-btn");
+        const resultBox = document.getElementById("cost-result");
+
+        function calculateMonthlyCost() {
+            const rent = Number(rentInput.value) || 0;
+            const food = Number(foodInput.value) || 0;
+            const travel = Number(travelInput.value) || 0;
+            const total = rent + food + travel;
+            resultBox.textContent = "Total monthly estimate: Rs " + total.toLocaleString("en-IN");
+        }
+
+        calculateButton.addEventListener("click", calculateMonthlyCost);
+    </script>
+</body>
+</html>
